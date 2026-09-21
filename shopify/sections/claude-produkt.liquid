@@ -1,0 +1,478 @@
+{%- render 'claude-header', active: 'produkt' -%}
+
+<main id="main">
+
+  <!-- 1+2. Galerie & Kaufbox -->
+  <section class="section" style="padding-top: var(--space-5);">
+    <div class="container product-layout">
+      <div>
+        <div class="img-placeholder gallery-main" role="img" aria-label="[PLATZHALTER: Hauptbild – Bandage von vorne]">
+          [PLATZHALTER: Hauptbild<br>Bandage von vorne]
+        </div>
+        <div class="gallery-thumbs">
+          <div class="img-placeholder">[PLATZHALTER: Seitenansicht]</div>
+          <div class="img-placeholder">[PLATZHALTER: Am Fuß getragen]</div>
+          <div class="img-placeholder">[PLATZHALTER: Im Schuh]</div>
+          <div class="img-placeholder">[PLATZHALTER: Materialdetail]</div>
+          <div class="img-placeholder">[PLATZHALTER: Kundenfoto – Platz für echte Fotos]</div>
+        </div>
+      </div>
+
+      <div class="buybox">
+        <div class="rating-line">
+          <span class="stars" aria-hidden="true">★★★★★</span>
+          <span>[PLATZHALTER: 4,X/5 – ECHTE ANZAHL EINSETZEN] Bewertungen</span>
+        </div>
+        <h1>{{ product.title }}</h1>
+        <p class="price-note">Fersen- &amp; Fußgewölbe-Stütze für den täglichen Gebrauch</p>
+        <div class="price-line">
+          <span class="price-now" id="claude-price-{{ section.id }}">{{ product.selected_or_first_available_variant.price | money }}</span>
+          <span class="price-note">inkl. MwSt., zzgl. Versand</span>
+        </div>
+
+        <ul class="benefit-bullets">
+          <li>
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6 9 17l-5-5"/></svg>
+            Entlastet den Sehnenansatz bei jedem Schritt
+          </li>
+          <li>
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6 9 17l-5-5"/></svg>
+            Passt unter Straßen- und Arbeitsschuhe
+          </li>
+          <li>
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6 9 17l-5-5"/></svg>
+            Anziehen, vergessen, den Tag leben
+          </li>
+          <li>
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6 9 17l-5-5"/></svg>
+            Waschbar bei 30 °C, lange einsatzbereit
+          </li>
+        </ul>
+
+        {%- comment -%} Echtes Shopify-Produktformular, gebunden an {{ product.title }} {%- endcomment -%}
+        <form method="post" action="/cart/add" id="claude-product-form-{{ section.id }}" class="claude-product-form" accept-charset="UTF-8">
+          <input type="hidden" name="id" id="claude-selected-variant-{{ section.id }}" value="{{ product.selected_or_first_available_variant.id }}">
+          <input type="hidden" name="quantity" value="1">
+          <input type="hidden" name="return_to" value="/cart">
+
+          {%- for option in product.options_with_values -%}
+            {%- if option.name == "Größe" -%}
+              <div class="size-select">
+                <span class="size-select-label">Größe wählen</span>
+                <div class="size-options" role="radiogroup" aria-label="Größe wählen">
+                  {%- for value in option.values -%}
+                    <label class="size-option">
+                      <input
+                        type="radio"
+                        name="claude-size-{{ section.id }}"
+                        value="{{ value | escape }}"
+                        data-option-position="{{ option.position }}"
+                        {% if value == product.selected_or_first_available_variant.option1 or value == product.selected_or_first_available_variant.option2 or value == product.selected_or_first_available_variant.option3 %}checked{% endif %}
+                      >
+                      {{ value }}
+                    </label>
+                  {%- endfor -%}
+                </div>
+                <p class="size-helper">[PLATZHALTER: Link/Tabelle zur Größenermittlung nach Fußumfang]</p>
+              </div>
+            {%- endif -%}
+          {%- endfor -%}
+
+          <button type="submit" class="btn btn-primary btn-block" id="claude-submit-{{ section.id }}"
+            {% unless product.selected_or_first_available_variant.available %}disabled{% endunless %}>
+            {% if product.selected_or_first_available_variant.available %}In den Warenkorb{% else %}Ausverkauft{% endif %}
+          </button>
+        </form>
+
+        <div class="trust-row">
+          <div>
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.3" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="7" width="16" height="12" rx="2"/><path d="M18 10h2.5a1 1 0 0 1 .9.6L23 15v4h-5"/><circle cx="7" cy="19" r="1.6"/><circle cx="17" cy="19" r="1.6"/></svg>
+            Versand aus Deutschland
+          </div>
+          <div>
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.3" stroke-linecap="round" stroke-linejoin="round"><path d="M3 12a9 9 0 1 0 18 0 9 9 0 0 0-18 0Z"/><path d="m9 12 2 2 4-4"/></svg>
+            30 Tage Rückgaberecht
+          </div>
+          <div>
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.3" stroke-linecap="round" stroke-linejoin="round"><path d="M4 5h16v10H4z"/><path d="M4 15v3a1 1 0 0 0 1 1h1"/><path d="M17 19h2a1 1 0 0 0 1-1v-3"/></svg>
+            Kauf auf Rechnung*
+          </div>
+        </div>
+        <p class="footnote">*[PLATZHALTER: Bedingungen Rechnungskauf, sofern verfügbar]</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- 3. Warum nichts geholfen hat (Glied 2) -->
+  <section class="section section--alt">
+    <div class="container">
+      <div class="section-head center">
+        <span class="eyebrow">Die Erklärung</span>
+        <h2>Warum Eis, Ibuprofen und Salbe allein oft scheitern mussten</h2>
+        <p>Bei anhaltendem Fersenschmerz handelt es sich meist nicht um eine akute Entzündung, sondern um überlastetes, verändertes Gewebe am Sehnenansatz – in der Fachsprache Fasziose genannt. Entzündungshemmer setzen genau dort an, wo eigentlich keine Entzündung mehr vorliegt. Das erklärt, warum diese Mittel bei vielen Betroffenen nicht den erhofften Effekt zeigen: Es liegt nicht daran, dass Sie etwas falsch gemacht haben.</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- 4. Mechanismus (Glied 3) -->
+  <section id="mechanismus" class="section">
+    <div class="container split">
+      <div>
+        <span class="eyebrow">Wie die Bandage wirkt</span>
+        <h2>Entlastung beim Gehen, nicht nur Dämpfung in Ruhe</h2>
+        <p>Überlastetes Gewebe braucht vor allem eines: weniger Zug bei Bewegung. Die AktivFuß Bandage führt Ferse und Fußgewölbe in einer stabilen Position und entlastet so den Sehnenansatz bei jedem Schritt. Die Kompression unterstützt zusätzlich die Durchblutung im Fußbereich.</p>
+        <p>Wichtig für die ehrliche Einordnung: Das ist eine mechanische Entlastung im Alltag – keine Behandlung der zugrundeliegenden Ursache und kein Ersatz für ärztliche oder physiotherapeutische Versorgung.</p>
+      </div>
+      <div class="img-placeholder" role="img" aria-label="[PLATZHALTER: Grafik Kraftverlauf/Entlastung beim Abrollen]">
+        [PLATZHALTER: Grafik<br>Entlastung beim Abrollen]
+      </div>
+    </div>
+  </section>
+
+  <!-- 5. Feature-Grid -->
+  <section class="section section--alt">
+    <div class="container">
+      <div class="section-head center">
+        <span class="eyebrow">Ausstattung</span>
+        <h2>Was die Bandage im Alltag leistet</h2>
+      </div>
+      <div class="tile-grid cols-4">
+        <div class="tile">
+          <div class="tile-icon"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 21v-7a8 8 0 0 1 16 0v7"/><path d="M4 14h16"/></svg></div>
+          <h3>Gezielte Kompression</h3>
+          <p>Abgestufter Druck auf Ferse und Fußgewölbe.</p>
+        </div>
+        <div class="tile">
+          <div class="tile-icon"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M2 12s4-7 10-7 10 7 10 7-4 7-10 7-10-7-10-7Z"/><circle cx="12" cy="12" r="2.5"/></svg></div>
+          <h3>Flach im Schuh</h3>
+          <p>Passt unter die meisten Alltags- und Arbeitsschuhe.</p>
+        </div>
+        <div class="tile">
+          <div class="tile-icon"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3v3"/><path d="m18.4 5.6-2.1 2.1"/><path d="M21 12h-3"/><path d="m18.4 18.4-2.1-2.1"/><path d="M12 18v3"/><path d="m5.6 18.4 2.1-2.1"/><path d="M3 12h3"/><path d="m5.6 5.6 2.1 2.1"/></svg></div>
+          <h3>Atmungsaktives Gestrick</h3>
+          <p>Angenehm auch über mehrere Stunden am Tag.</p>
+        </div>
+        <div class="tile">
+          <div class="tile-icon"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 6h18M3 12h18M3 18h18"/></svg></div>
+          <h3>Waschbar bei 30 °C</h3>
+          <p>Pflegeleicht, liegend trocknen, lange haltbar.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- 6. Die Kaskade -->
+  <section class="section">
+    <div class="container">
+      <div class="section-head center">
+        <span class="eyebrow">Warum jetzt</span>
+        <h2>Der Schmerz bleibt selten dort, wo er anfängt</h2>
+        <p>Wer den Fuß schont oder schiefer läuft, um die Ferse zu entlasten, verlagert die Belastung – oft, ohne es zu merken.</p>
+      </div>
+      <div class="cascade">
+        <div class="cascade-step"><strong>Ferse</strong><br>Schmerz beim Auftreten</div>
+        <div class="cascade-arrow" aria-hidden="true">
+          <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M13 6l6 6-6 6"/></svg>
+        </div>
+        <div class="cascade-step"><strong>Gangbild</strong><br>Unbewusstes Schonen</div>
+        <div class="cascade-arrow" aria-hidden="true">
+          <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M13 6l6 6-6 6"/></svg>
+        </div>
+        <div class="cascade-step"><strong>Knie</strong><br>Zusätzliche Fehlbelastung</div>
+        <div class="cascade-arrow" aria-hidden="true">
+          <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M13 6l6 6-6 6"/></svg>
+        </div>
+        <div class="cascade-step"><strong>Hüfte &amp; Rücken</strong><br>Folgebeschwerden möglich</div>
+      </div>
+    </div>
+  </section>
+
+  <!-- 7. Anwendungstreue-USP (Glied 5) -->
+  <section class="section section--dark">
+    <div class="container split">
+      <div>
+        <span class="eyebrow" style="color:#F5F1E6;">Der größte Unterschied</span>
+        <h2>Anziehen, in den Schuh, vergessen – den Tag leben</h2>
+        <p>Nachtschienen fliegen irgendwann aus dem Bett. Übungspläne schlafen ein. Einlagen liegen im anderen Schuh. Die AktivFuß Bandage ist so gedacht, dass sie im Alltag bleibt: morgens angezogen, den ganzen Tag dabei – ohne dass Sie aktiv daran denken müssen.</p>
+      </div>
+      <div class="img-placeholder" role="img" aria-label="[PLATZHALTER: Bandage im Schuh, Alltagssituation]" style="border-color: rgba(245,241,230,.35); background: rgba(245,241,230,.06); color: rgba(245,241,230,.75);">
+        [PLATZHALTER: Bandage im Schuh<br>Alltagsszene]
+      </div>
+    </div>
+  </section>
+
+  <!-- 8. Vergleichstabelle -->
+  <section class="section">
+    <div class="container">
+      <div class="section-head center">
+        <span class="eyebrow">Einordnung</span>
+        <h2>Wie die Bandage im Vergleich steht</h2>
+      </div>
+      <div class="compare-scroll">
+        <table class="compare">
+          <thead>
+            <tr>
+              <th></th>
+              <th class="compare-hero">AktivFuß Bandage</th>
+              <th>Einlagen</th>
+              <th>Nachtschiene</th>
+              <th>Kortisonspritze</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td>Täglich tragbar</td>
+              <td class="compare-hero"><span class="yes">✔</span></td>
+              <td><span class="yes">✔</span></td>
+              <td><span class="no">nur nachts</span></td>
+              <td><span class="no">Einzelanwendung</span></td>
+            </tr>
+            <tr>
+              <td>Ohne Rezept erhältlich</td>
+              <td class="compare-hero"><span class="yes">✔</span></td>
+              <td><span class="no">meist verordnet</span></td>
+              <td><span class="no">meist verordnet</span></td>
+              <td><span class="no">ärztlich</span></td>
+            </tr>
+            <tr>
+              <td>Keine Disziplin/Übungsroutine nötig</td>
+              <td class="compare-hero"><span class="yes">✔</span></td>
+              <td><span class="yes">✔</span></td>
+              <td><span class="no">Tragedisziplin nötig</span></td>
+              <td><span class="yes">✔</span></td>
+            </tr>
+            <tr>
+              <td>Keine dokumentierten Nebenwirkungen*</td>
+              <td class="compare-hero"><span class="yes">✔</span></td>
+              <td><span class="yes">✔</span></td>
+              <td><span class="yes">✔</span></td>
+              <td><span class="no">möglich</span></td>
+            </tr>
+            <tr>
+              <td>Sofort einsetzbar</td>
+              <td class="compare-hero"><span class="yes">✔</span></td>
+              <td><span class="no">Anfertigung nötig</span></td>
+              <td><span class="yes">✔</span></td>
+              <td><span class="no">Terminvereinbarung</span></td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+      <p class="footnote">*Bezogen auf die Bandage selbst; individuelle Unverträglichkeiten gegenüber Materialien sind möglich. Kein Ersatz für ärztlichen Rat.</p>
+    </div>
+  </section>
+
+  <!-- 9. Diabetes-/Durchblutungs-Abschnitt -->
+  <section class="section section--alt">
+    <div class="container">
+      <div class="section-head center">
+        <span class="eyebrow">Offen angesprochen</span>
+        <h2>Auch bei Diabetes oder Durchblutungsproblemen eine Option</h2>
+        <p>Viele Anbieter schließen diese Gruppe pauschal aus. Wir möchten stattdessen ehrlich informieren: Die Kompression unterstützt die Durchblutung im Fußbereich. Ob die Bandage für Sie persönlich geeignet ist, hängt von Ihrer individuellen Situation ab.</p>
+      </div>
+      <div class="callout" style="max-width: 46rem; margin-inline: auto;">
+        <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 9v4"/><path d="M12 17h.01"/><path d="M10.3 3.9 1.8 18a2 2 0 0 0 1.7 3h17a2 2 0 0 0 1.7-3L13.7 3.9a2 2 0 0 0-3.4 0Z"/></svg>
+        <div>
+          <strong>Wichtiger Hinweis</strong>
+          Bei Diabetes, Durchblutungsstörungen oder Nervenschädigung bitte vorab ärztlich abklären.
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- 10. Testimonials -->
+  <section class="section">
+    <div class="container">
+      <div class="section-head center">
+        <span class="eyebrow">Erfahrungen</span>
+        <h2>Stimmen von Kundinnen und Kunden</h2>
+      </div>
+      <div class="testimonial-grid">
+        <div class="testimonial-card">
+          <div class="testimonial-top">
+            <span class="stars" aria-hidden="true">★★★★★</span>
+            <span class="placeholder-tag">Platzhalter</span>
+          </div>
+          <p class="testimonial-quote">[KUNDENBEWERTUNG EINFÜGEN – Zitat, Name, Datum, Foto]</p>
+          <p class="testimonial-meta">[PLATZHALTER: Name] · [PLATZHALTER: Verifizierter Kauf, Datum]</p>
+        </div>
+        <div class="testimonial-card">
+          <div class="testimonial-top">
+            <span class="stars" aria-hidden="true">★★★★★</span>
+            <span class="placeholder-tag">Platzhalter</span>
+          </div>
+          <p class="testimonial-quote">[KUNDENBEWERTUNG EINFÜGEN – Zitat, Name, Datum, Foto]</p>
+          <p class="testimonial-meta">[PLATZHALTER: Name] · [PLATZHALTER: Verifizierter Kauf, Datum]</p>
+        </div>
+        <div class="testimonial-card">
+          <div class="testimonial-top">
+            <span class="stars" aria-hidden="true">★★★★★</span>
+            <span class="placeholder-tag">Platzhalter</span>
+          </div>
+          <p class="testimonial-quote">[KUNDENBEWERTUNG EINFÜGEN – Zitat, Name, Datum, Foto]</p>
+          <p class="testimonial-meta">[PLATZHALTER: Name] · [PLATZHALTER: Verifizierter Kauf, Datum]</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- 11. Garantie / Risikoumkehr -->
+  <section class="section section--alt">
+    <div class="container">
+      <div class="guarantee-box">
+        <div class="g-icon">
+          <svg width="34" height="34" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 22s8-4 8-11V5l-8-3-8 3v6c0 7 8 11 8 11Z"/><path d="m9 12 2 2 4-4"/></svg>
+        </div>
+        <div>
+          <h2>30 Tage in Ruhe testen</h2>
+          <p>Passt die Bandage nicht oder überzeugt Sie nicht, senden Sie sie innerhalb von 30 Tagen zurück. Rücksendeadresse in Deutschland, persönlicher Kundenservice – kein anonymes Auslandslager.</p>
+          <p class="footnote" style="color: rgba(245,241,230,.7);">[PLATZHALTER: genaue Rückgabebedingungen, Rücksendeadresse]</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- 12. Review-Feed -->
+  <section class="section">
+    <div class="container">
+      <div class="section-head center">
+        <span class="eyebrow">Bewertungen</span>
+        <h2>Alle Bewertungen im Überblick</h2>
+        <p class="footnote">[PLATZHALTER: Feed mit 15–30 echten Bewertungen – Foto, Name, „Verifizierter Kauf", Datum, Sterne. Struktur ist technisch fertig, Inhalte bitte über das Bewertungssystem befüllen.]</p>
+      </div>
+      <div class="review-feed">
+        {%- for i in (1..6) -%}
+        <div class="review-card">
+          <div class="img-placeholder">[Foto]</div>
+          <div class="stars" aria-hidden="true">★★★★★</div>
+          <p class="testimonial-meta">[PLATZHALTER: Name] · [PLATZHALTER: Verifizierter Kauf] · [PLATZHALTER: Datum]</p>
+          <p>[PLATZHALTER: Bewertungstext]</p>
+        </div>
+        {%- endfor -%}
+      </div>
+    </div>
+  </section>
+
+  <!-- 13. Kurz-FAQ + zweiter CTA -->
+  <section class="section section--alt">
+    <div class="container">
+      <div class="section-head center">
+        <span class="eyebrow">Häufige Fragen</span>
+        <h2>Die wichtigsten Fragen kurz beantwortet</h2>
+      </div>
+      <div style="max-width: 760px; margin-inline: auto;">
+        <div class="accordion-item" data-open="false">
+          <button class="accordion-trigger" aria-expanded="false">
+            Passt die Bandage in meinen Arbeitsschuh?
+            <span class="plus" aria-hidden="true"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round"><path d="M12 5v14M5 12h14"/></svg></span>
+          </button>
+          <div class="accordion-panel"><div class="accordion-panel-inner"><p>In den meisten Fällen ja. Das flache Gestrick passt unter Straßenschuhe und viele Arbeitsschuhe, ohne den Sitz zu verändern.</p></div></div>
+        </div>
+        <div class="accordion-item" data-open="false">
+          <button class="accordion-trigger" aria-expanded="false">
+            Ersetzt die Bandage meine Einlagen?
+            <span class="plus" aria-hidden="true"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round"><path d="M12 5v14M5 12h14"/></svg></span>
+          </button>
+          <div class="accordion-panel"><div class="accordion-panel-inner"><p>Nein. Sie lässt sich mit Ihren Einlagen und Dehnübungen kombinieren.</p></div></div>
+        </div>
+        <div class="accordion-item" data-open="false">
+          <button class="accordion-trigger" aria-expanded="false">
+            Darf ich die Bandage bei Diabetes tragen?
+            <span class="plus" aria-hidden="true"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round"><path d="M12 5v14M5 12h14"/></svg></span>
+          </button>
+          <div class="accordion-panel"><div class="accordion-panel-inner"><p>Das ist individuell zu klären. Bei Diabetes, Durchblutungsstörungen oder Nervenschädigung bitte vorab ärztlich abklären.</p></div></div>
+        </div>
+        <div class="accordion-item" data-open="false">
+          <button class="accordion-trigger" aria-expanded="false">
+            Was, wenn sie nicht passt?
+            <span class="plus" aria-hidden="true"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round"><path d="M12 5v14M5 12h14"/></svg></span>
+          </button>
+          <div class="accordion-panel"><div class="accordion-panel-inner"><p>Sie senden sie innerhalb von 30 Tagen zurück – ohne Diskussion, an eine deutsche Adresse.</p></div></div>
+        </div>
+        <div class="accordion-item" data-open="false">
+          <button class="accordion-trigger" aria-expanded="false">
+            Zahlt die Krankenkasse die Bandage?
+            <span class="plus" aria-hidden="true"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round"><path d="M12 5v14M5 12h14"/></svg></span>
+          </button>
+          <div class="accordion-panel"><div class="accordion-panel-inner"><p>In der Regel nicht. Dafür erhalten Sie die Bandage ohne Arzttermin und Wartezeit direkt bei uns.</p></div></div>
+        </div>
+      </div>
+      <p style="text-align:center; margin-top: var(--space-4);">
+        <a href="/pages/faq-claude-code" class="btn btn-secondary">Alle Fragen ansehen</a>
+      </p>
+      <div class="cta-band" style="margin-top: var(--space-5);">
+        <h2>Den ersten Schritt zurück in den Alltag machen</h2>
+        <p>30 Tage risikofrei testen, Versand aus Deutschland.</p>
+        <button type="submit" form="claude-product-form-{{ section.id }}" class="btn btn-primary">In den Warenkorb</button>
+      </div>
+    </div>
+  </section>
+
+</main>
+
+{%- render 'claude-footer' -%}
+
+<script>
+(function () {
+  "use strict";
+  var sectionId = {{ section.id | json }};
+  var form = document.getElementById("claude-product-form-" + sectionId);
+  if (!form) return;
+
+  var variants = {{ product.variants | json }};
+  var variantIdInput = document.getElementById("claude-selected-variant-" + sectionId);
+  var priceEl = document.getElementById("claude-price-" + sectionId);
+  var submitBtn = document.getElementById("claude-submit-" + sectionId);
+
+  var variantPrices = {};
+  {%- for variant in product.variants -%}
+  variantPrices[{{ variant.id | json }}] = {{ variant.price | money | json }};
+  {%- endfor -%}
+
+  var radios = form.querySelectorAll('input[type="radio"][data-option-position]');
+
+  function findVariantByOption1(value) {
+    for (var i = 0; i < variants.length; i++) {
+      if (variants[i].option1 === value) return variants[i];
+    }
+    return null;
+  }
+
+  function selectVariant(variant) {
+    if (!variant) return;
+    variantIdInput.value = variant.id;
+    if (priceEl && variantPrices[variant.id]) {
+      priceEl.textContent = variantPrices[variant.id];
+    }
+    if (submitBtn) {
+      if (variant.available) {
+        submitBtn.disabled = false;
+        submitBtn.textContent = "In den Warenkorb";
+      } else {
+        submitBtn.disabled = true;
+        submitBtn.textContent = "Ausverkauft";
+      }
+    }
+  }
+
+  radios.forEach(function (radio) {
+    radio.addEventListener("change", function () {
+      var variant = findVariantByOption1(radio.value);
+      selectVariant(variant);
+    });
+  });
+
+  form.addEventListener("submit", function (e) {
+    if (submitBtn && submitBtn.disabled) {
+      e.preventDefault();
+    }
+  });
+})();
+</script>
+
+{% schema %}
+{
+  "name": "Claude Code – Produkt",
+  "settings": []
+}
+{% endschema %}

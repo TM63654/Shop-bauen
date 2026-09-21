@@ -1,0 +1,9 @@
+{
+  "layout": "claude-code",
+  "sections": {
+    "main": {
+      "type": "claude-ueber-uns"
+    }
+  },
+  "order": ["main"]
+}
